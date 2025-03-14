@@ -1,4 +1,4 @@
-const VERSION = '1.9.4 (Beta)';
+const VERSION = '1.9.6 (Beta)';
 
 function resolvePath(relativePath) {
     const base = document.querySelector('base')?.href || window.location.origin;
