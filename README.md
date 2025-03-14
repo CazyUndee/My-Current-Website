@@ -9,6 +9,7 @@ This is my website, it features me and my friends' projects, however, I am not a
 This website offers a variety of features, including:
 
 *   **Core Pages:**
+
     *   **Home Page:** The main landing page for the website.
 *   **User Experience:**
     *   **Responsive Design:** The website adapts to different screen sizes and devices.
@@ -33,15 +34,18 @@ This website offers a variety of features, including:
 This website is built using the following technologies:
 
 *   **Core Web Technologies:**
+
     *   **HTML:** For structuring the content.
     *   **CSS:** For styling and layout.
     *   **JavaScript:** For interactivity, dynamic features, and logic.
 *   **Libraries/Frameworks:**
+
     *   **None:** This project is built using vanilla JavaScript, HTML, and CSS without external libraries or frameworks.
 *   **Tools & Services:**
     *   **Google Fonts:** For custom typography.
     *   **GitHub:** For version control and hosting.
-* **Techniques:**
+    *   **Vercel:** For real-time hosting and deployment. 
+* **Techniques to Achieve:**
     * **Local Storage:** For persisting user preferences and account information.
     * **DOM Manipulation:** For dynamically updating the page content.
     * **CSS Classes:** For styling and toggling visibility.
