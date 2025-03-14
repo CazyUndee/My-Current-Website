@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Test</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        body.dark-mode {
+            background-color: #222;
+            color: #e0e0e0;
+        }
+
+        body.light-mode {
+            background-color: #fff;
+            color: #333;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="dark-mode">
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+
+    <div style="flex: 1; padding: 20px;">
+        <h1>Footer Test Page</h1>
+        <p>Test content above footer</p>
+    </div>
+
+    <footer style="background-color: var(--footer-bg); padding: 20px 40px 0 40px; border-top: 1px solid var(--border-color);">
+        <div style="max-width: 1800px; margin: 0 auto; display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 40px;">
+            <!-- About Section -->
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">About Us</h3>
+                <p style="font-size: 13px; line-height: 1.4;">
+                    We create fun and engaging games for players worldwide. If you enjoy our games and want to support our project, consider sharing our website with your friends, or follow our social media accounts. Every bit of support helps and we appreciate it a lot!
+                </p>
+            </div>
+    
+            <!-- Quick Links -->
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Popular Games</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">New Releases</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Community</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Support</a></li>
+                </ul>
+            </div>
+    
+            <!-- Connect -->
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Connect</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Discord</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Twitter</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">YouTube</a></li>
+                    <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px;">Instagram</a></li>
+                </ul>
+            </div>
+    
+            <!-- Newsletter -->
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Newsletter</h3>
+                <input type="email" placeholder="Enter your email" style="width: 100%; padding: 6px; margin-bottom: 8px; background: var(--input-bg); border: 1px solid var(--border-color); color: inherit; border-radius: 4px; font-size: 13px;">
+                <button style="width: 100%; padding: 6px; background: #007bff; color: #fff; border: none; border-radius: 4px; cursor: pointer; font-size: 13px;">Subscribe</button>
+            </div>
+        </div>
+
+        <!-- Copyright Notice -->
+        <div style="border-top: 1px solid var(--border-color); margin-top: 15px; height: 40px; display: flex; align-items: center; justify-content: center;">
+            <p style="font-size: 11px; margin: 0;">&copy; 2025 My Game Website. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function setThemeColors(isDark) {
+            document.documentElement.style.setProperty('--footer-bg', isDark ? '#1a1a1a' : '#e5e5e5');
+            document.documentElement.style.setProperty('--border-color', isDark ? '#333' : '#ddd');
+            document.documentElement.style.setProperty('--input-bg', isDark ? '#333' : '#f5f5f5');
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            const isDark = body.classList.contains('dark-mode');
+            body.classList.toggle('dark-mode');
+            body.classList.toggle('light-mode');
+            setThemeColors(!isDark);
+        }
+
+        // Set initial theme colors
+        setThemeColors(true);
+    </script>
+</body>
+</html>

@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Projects Site - Flappy Bird</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" id="favicon" href="../images/dmdico.png" type="image/png">
+    <link rel="stylesheet" href="../../css/style.css">
+    <style>
+        #flappy-container {
+            position: relative;
+            width: 90vw;
+            margin: 20px auto;
+            background-color: skyblue;
+            overflow: hidden;
+            max-width: 1000px;
+            margin-top: 60px; /* Add margin below the navbar */
+        }
+
+        #bird {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: yellow;
+            top: 200px;
+            left: 100px;
+        }
+
+        .pipe {
+            position: absolute;
+            width: 50px;
+            background-color: green;
+        }
+        .pipe-top {
+            top: 0;
+        }
+
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: white;
+            z-index: 10;
+        }
+
+        #game-over {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 10;
+        }
+        #game-over button {
+            border-radius: 10px;
+            background-color: var(--footer-bg);
+            color: white;
+            border: none;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body class="dark-mode" style="min-height: 100vh; margin: 0; display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif;">
+    <div style="flex: 1;">
+        <div id="overlay"></div>
+        <div id="loginPopup">
+            <h2>Account Login</h2>
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" name="loginUsername">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword">
+            <div class="button-container">
+                <button onclick="login()">Login</button>
+                <button onclick="createAccount()">Create Account</button>
+            </div>
+        </div>
+
+        <div class="navbar">
+            <div class="logo-container">
+                <img id="navbarLogo" src="../images/dmdico.png" alt="Logo">
+                <span class="logo-text">My Game Website</span>
+            </div>
+            <div class="right-items">
+                <button class="login-button" onclick="toggleLoginPopup()">Login/Create Account</button>
+                <div class="settings-wrapper" onclick="toggleSettingsMenu()">
+                    <span class="settings-emoji">⚙</span>
+                    <span class="settings-text">Settings</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="flappy-container">
+            <div id="bird"></div>
+            <div class="score">0</div>
+            <div id="game-over">
+                <h2>Game Over!</h2>
+                <p>Your score: <span id="final-score"></span></p>
+                <button onclick="restartGame()">Restart</button>
+            </div>
+        </div>
+
+        <script src="../../js/script.js"></script>
+        <script>
+            const bird = document.getElementById('bird');
+            const container = document.getElementById('flappy-container');
+            const scoreDisplay = document.querySelector('.score');
+            const gameOverScreen = document.getElementById('game-over');
+            const finalScoreDisplay = document.getElementById('final-score');
+            const navbar = document.querySelector('.navbar');
+            const footer = document.querySelector('footer');
+
+            let birdY = 200;
+            let velocity = 0;
+            const gravity = 0.5;
+            const jumpHeight = -10;
+            let score = 0;
+            let pipes = [];
+            let gameRunning = true;
+            let gapHeight = 150;
+            let pipeInterval = 2500;
+
+            function updateContainerHeight() {
+                const navbarHeight = navbar.offsetHeight;
+                const footerHeight = footer.offsetHeight;
+                const availableHeight = window.innerHeight - navbarHeight - footerHeight;
+                container.style.height = `${availableHeight}px`;
+                
+                birdY = container.clientHeight / 2;
+                bird.style.top = birdY + 'px';
+                
+                
+            }
+
+            function updateBird() {
+                if (!gameRunning) return;
+                velocity += gravity;
+                birdY += velocity;
+                bird.style.top = birdY + 'px';
+
+                if (birdY < 0 || birdY > container.clientHeight - bird.clientHeight) {
+                    gameOver();
+                }
+            }
+
+            function jump() {
+                if (!gameRunning) return;
+                velocity = jumpHeight;
+            }
+
+            function createPipe() {
+                if (!gameRunning) return;
+                const pipeHeight = Math.floor(Math.random() * (container.clientHeight - gapHeight - 200)) + 100;
+                gapHeight = Math.min(gapHeight, container.clientHeight - pipeHeight - 100);
+
+                const pipeTop = document.createElement('div');
+                const pipeBottom = document.createElement('div');
+
+                pipeTop.style.width = '50px';
+                pipeBottom.style.width = '50px';
+                pipeTop.style.backgroundColor = 'green';
+                pipeBottom.style.backgroundColor = 'green';
+
+                pipeTop.className = 'pipe pipe-top';
+                pipeBottom.className = 'pipe';
+
+                pipeTop.style.height = pipeHeight + 'px';
+                pipeBottom.style.height = container.clientHeight - pipeHeight - gapHeight + 'px';
+
+                const pipeX = container.clientWidth;
+                pipeTop.style.left = pipeX + 'px';
+                pipeBottom.style.left = pipeX + 'px';
+
+                container.appendChild(pipeTop);
+                container.appendChild(pipeBottom);
+
+                pipes.push({ top: pipeTop, bottom: pipeBottom, x: pipeX });
+            }
+
+            function updatePipes() {
+                if (!gameRunning) return;
+                for (let i = pipes.length - 1; i >= 0; i--) {
+                    const pipe = pipes[i];
+
+                    // Check for collision *before* moving the pipe
+                    if (checkCollision(pipe)) {
+                        gameOver();
+                        return; // Exit the function after game over
+                    }
+
+                    pipe.x -= 2;
+                    pipe.top.style.left = pipe.x + 'px';
+                    pipe.bottom.style.left = pipe.x + 'px';
+
+                    if (pipe.x + pipe.top.clientWidth < 0) {
+                        pipe.top.remove();
+                        pipe.bottom.remove();
+                        pipes.shift();
+                        score++;
+                        scoreDisplay.textContent = score;
+                    }
+                }
+            }
+
+            function checkCollision(pipe) {
+                const birdRect = bird.getBoundingClientRect();
+                const topPipeRect = pipe.top.getBoundingClientRect();
+                const bottomPipeRect = pipe.bottom.getBoundingClientRect();
+
+                if (birdRect.left < topPipeRect.right && birdRect.right > topPipeRect.left) {
+                    if (birdRect.top < topPipeRect.bottom || birdRect.bottom > bottomPipeRect.top) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            function gameOver() {
+                gameRunning = false;
+                gameOverScreen.style.display = 'block';
+                finalScoreDisplay.textContent = score;
+            }
+
+            function restartGame() {
+                birdY = 200;
+                velocity = 0;
+                score = 0;
+                scoreDisplay.textContent = score;
+                pipes.forEach(pipe => {
+                    pipe.top.remove();
+                    pipe.bottom.remove();
+                });
+                pipes = [];
+                gameRunning = true;
+                gameOverScreen.style.display = 'none';
+                bird.style.top = birdY + 'px';
+                createPipe();
+            }
+
+            updateContainerHeight()
+
+            setInterval(updateBird, 20);
+            setInterval(updatePipes, 20);
+            setInterval(createPipe, pipeInterval);
+
+            document.addEventListener('click', jump);
+            restartGame();
+        </script>
+    </div>
+
+    <footer style="background-color: var(--footer-bg); padding: 20px 0 0 0; border-top: 1px solid var(--footer-border);">
+        <div style="max-width: 1800px; margin: 0 auto; padding: 0 40px; display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 40px;">
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">About Us</h3>
+                <p style="font-size: 13px; line-height: 1.4;">
+                    We create fun and engaging games for players worldwide.
+                    If you enjoy our games and want to support our project,
+                    consider sharing our website with your friends, or follow our social media accounts.
+                    Every bit of support helps and we appreciate it a lot!
+                </p>
+                <p style="font-size: 13px; line-height: 1.4;">
+                    We are always open to new ideas and suggestions,
+                    so feel free to reach out to us and let us know what you think we should add,
+                    remove or improve on our website.
+                </p>
+            </div>
+
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Quick Links</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Popular Games</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">New Releases</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Community</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Support</a></li>
+                </ul>
+            </div>
+
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Connect</h3>
+                <ul style="list-style: none; padding: 0; margin: 0;">
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Discord</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Twitter</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">YouTube</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Instagram</a></li>
+                </ul>
+            </div>
+
+            <div style="padding: 10px 0;">
+                <h3 style="font-size: 16px; margin-bottom: 10px;">Newsletter</h3>
+                <div style="max-width: 180px;">
+                    <input type="email"
+                           placeholder="Enter your email"
+                           style="width: 100%;
+                                   padding: 6px;
+                                   margin-bottom: 8px;
+                                   background: var(--input-bg);
+                                   border: 1px solid var(--footer-border);
+                                   color: inherit;
+                                   border-radius: 4px;
+                                   font-size: 13px;">
+                    <button style="width: auto;
+                                    padding: 6px 20px;
+                                    background: #007bff;
+                                    color: #fff;
+                                    border: none;
+                                    border-radius: 4px;
+                                    cursor: pointer;
+                                    font-size: 13px;">Subscribe</button>
+                </div>
+            </div>
+        </div>
+
+        <div style="width: 100%;
+                            border-top: 1px solid var(--footer-border);
+                            margin-top: 15px;
+                            padding: 10px 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            text-align: center;">
+            <p style="font-size: 11px; margin: 0;">&copy; 2025 My Project Website. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

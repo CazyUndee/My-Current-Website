@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Projects Site</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="icon" id="favicon" href="../dmdico.png" type="image/png">
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body class="dark-mode" style="min-height: 100vh; margin: 0; display: flex; flex-direction: column;">
+        <div style="flex: 1;">
+            <div id="overlay" onclick="closeLoginPopup()"></div>
+            <div id="loginPopup">
+                <h2>Account Login</h2>
+                <label for="loginUsername">Username:</label>
+                <input type="text" id="loginUsername" name="loginUsername">
+              
+                <label for="loginPassword">Password:</label>
+                <input type="password" id="loginPassword" name="loginPassword">
+                <div class="button-container">
+                    <button onclick="login()">Login</button>
+                    <button onclick="createAccount()">Create Account</button>
+                </div>
+            </div>
+
+            <div class="navbar">
+                <div class="logo-container">
+                    <img id="navbarLogo" src="../dmdico.png" alt="Logo">
+                    <span class="logo-text">My Game Website</span>
+                </div>
+                <div class="right-items">
+                    <button class="login-button" onclick="toggleLoginPopup()">Login/Create Account</button>
+                    <span class="settings" onclick="toggleSettingsMenu()">⚙ Settings</span>
+                </div>
+            </div>
+
+            <script src="../js/script.js"></script>
+
+            <h1 class="welcome-message">Web Games:</h1>
+
+            <!-- Add your game container here -->
+            <div class="game-container" id="gameContainer">
+                <!-- Add your web games here -->
+            </div>
+
+            <div id="settingsPopup">
+                <div class="setting-section">
+                    <h3>Theme</h3>
+                    <label>
+                        <span>Use Light Theme</span>
+                        <label class="switch">
+                            <input type="checkbox" id="themeToggle" onchange="onThemeSwitchChange(this)" ${currentTheme === 'light' ? 'checked' : ''}>
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                </div>
+                <hr/>
+                <div class="setting-section">
+                    <h3>Performance</h3>
+                    <label>
+                        <span>Show Logo</span>
+                        <label class="switch">
+                            <input type="checkbox" id="logoVisibilityToggle" onchange="onLogoVisibilityChange(this)" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                    <label>
+                        <span>Animations</span>
+                        <label class="switch">
+                            <input type="checkbox" id="animationsToggle" onchange="onAnimationsToggleChange(this)" checked>
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                </div>
+                <hr/>
+                <div class="setting-section">
+                    <h3>Development</h3>
+                    <label>
+                        <span>Show Games</span>
+                        <label class="switch">
+                            <input type="checkbox" id="gameVisibilityToggle" onchange="onGameVisibilityChange(this)" ${isGameContainerVisible ? 'checked' : ''}>
+                            <span class="slider round"></span>
+                        </label>
+                    </label>
+                </div>
+                <hr/>
+                ${loggedInUsername ? `
+                <div class="setting-section">
+                    <h3>Account</h3>
+                    <p>Logged in as: ${loggedInUsername}</p>
+                    <button onclick="logout()" style="padding: 8px 15px; border-radius: 5px; border: none; background-color: #dc3545; color: white; cursor: pointer;">Logout</button>
+                </div>
+                <hr/>` : `
+                <div class="setting-section">
+                    <h3>Account</h3>
+                    <p>Not logged in</p>
+                    <button onclick="toggleLoginPopup()" style="padding: 8px 15px; border-radius: 5px; border: none; background-color: #007bff; color: white; cursor: pointer;">Login/Create Account</button>
+                </div>
+                <hr/>`}
+            </div>
+        </div>
+
+        <footer style="background-color: var(--footer-bg); padding: 20px 40px 0 40px; border-top: 1px solid var(--footer-border);">
+            <div style="max-width: 1800px; margin: 0 auto; display: grid; grid-template-columns: 3fr 1fr 1fr 1fr; gap: 40px;">
+                <!-- About Section -->
+                <div style="padding: 10px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">About Us</h3>
+                    <p style="font-size: 13px; line-height: 1.4;">
+                        We create fun and engaging games for players worldwide. If you enjoy our games and want to support our project, consider sharing our website with your friends, or follow our social media accounts. Every bit of support helps and we appreciate it a lot!
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div style="padding: 10px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">Quick Links</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Popular Games</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">New Releases</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Community</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Connect -->
+                <div style="padding: 10px 0;">
+                    <h3 style="font-size: 16px; margin-bottom: 10px;">Connect</h3>
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Discord</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Twitter</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">YouTube</a></li>
+                        <li style="margin-bottom: 8px;"><a href="#" style="text-decoration: none; font-size: 13px; color: inherit;">Instagram</a></li>
+                    </ul>
+                </div>
+
+<!-- Newsletter -->
+<div style="padding: 10px 0;">
+    <h3 style="font-size: 16px; margin-bottom: 10px;">Newsletter</h3>
+    <div style="max-width: 180px;">  <!-- Added container with max-width -->
+        <input type="email" 
+               placeholder="Enter your email" 
+               style="width: 100%; 
+                      padding: 6px; 
+                      margin-bottom: 8px; 
+                      background: var(--input-bg); 
+                      border: 1px solid var(--footer-border); 
+                      color: inherit; 
+                      border-radius: 4px; 
+                      font-size: 13px;">
+        <button style="width: auto;  /* Changed from 100% to auto */
+                      padding: 6px 20px;  /* Added horizontal padding */
+                      background: #007bff; 
+                      color: #fff; 
+                      border: none; 
+                      border-radius: 4px; 
+                      cursor: pointer; 
+                      font-size: 13px;">Subscribe</button>
+    </div>
+</div>
+
+            <!-- Copyright Notice -->
+            <div style="border-top: 1px solid var(--footer-border); margin-top: 15px; height: 40px; display: flex; align-items: center; justify-content: center;">
+                <p style="font-size: 11px; margin: 0;">&copy; 2025 My Project Website. All rights reserved.</p>
+            </div>
+        </footer>
+    </body>
+</html>

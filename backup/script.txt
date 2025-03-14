@@ -1,18 +1,18 @@
-const VERSION = '1.8.4 (Beta)';
-
-// Global state
+let settingsPopup = null;
+let loginPopup = null;
+let overlay = document.getElementById('overlay');
 let currentTheme = localStorage.getItem('theme') || 'dark';
 let isLogoVisible = true;
 let isGameContainerVisible = localStorage.getItem('gameVisible') !== 'false';
 let loggedInUsername = localStorage.getItem('loggedInUsername') || null;
 let isAnimationsEnabled = localStorage.getItem('animationsEnabled') !== 'false';
-
-// DOM references
 const favicon = document.getElementById('favicon');
 const root = document.documentElement;
+const VERSION = '1.8.2 (Beta)';
 
-// Encryption functions
 function encryptData(password) {
+    // Using a fixed salt and simple encryption is not secure for production.
+    // This is only for demonstration purposes.
     let salt = "YOUR_CUSTOM_SALT_VALUE";
     let passwordWithSalt = password + salt;
     let encryptedPassword = "";
@@ -24,6 +24,8 @@ function encryptData(password) {
 }
 
 function decryptData(encryptedPassword) {
+    // Using a fixed salt and simple decryption is not secure for production.
+    // This is only for demonstration purposes.
     let salt = "YOUR_CUSTOM_SALT_VALUE";
     let decryptedBytes = atob(encryptedPassword);
     let decryptedPassword = "";
@@ -34,17 +36,20 @@ function decryptData(encryptedPassword) {
     return decryptedPassword.slice(0, decryptedPassword.length - salt.length);
 }
 
-// UI update functions
 function updateWelcomeMessage() {
     const welcomeMessageElement = document.querySelector('.welcome-message');
-    welcomeMessageElement.textContent = loggedInUsername ? `Welcome, ${loggedInUsername}!` : "Welcome!";
+    if (loggedInUsername) {
+        welcomeMessageElement.textContent = `Welcome, ${loggedInUsername}!`;
+    } else {
+        welcomeMessageElement.textContent = "Welcome!";
+    }
 }
 
 function applySettingsPopupTheme(theme) {
     const popup = document.getElementById('settingsPopup');
     if (popup) {
         popup.classList.remove('dark-mode', 'light-mode');
-        popup.classList.add(`${theme}-mode`);
+        popup.classList.add(theme + '-mode');
     }
 }
 
@@ -52,14 +57,13 @@ function applyLoginPopupTheme(theme) {
     const popup = document.getElementById('loginPopup');
     if (popup) {
         popup.classList.remove('dark-mode', 'light-mode');
-        popup.classList.add(`${theme}-mode`);
+        popup.classList.add(theme + '-mode');
     }
 }
 
-// Settings menu functions
 function openSettingsMenu() {
     if (!document.getElementById('settingsPopup')) {
-        const settingsPopup = document.createElement('div');
+        settingsPopup = document.createElement('div');
         settingsPopup.id = 'settingsPopup';
         settingsPopup.innerHTML = `
             <div class="setting-section">
@@ -121,7 +125,8 @@ function openSettingsMenu() {
             </div>
         `;
         document.body.appendChild(settingsPopup);
-        settingsPopup.offsetHeight; // Force reflow
+        // Force a reflow
+        settingsPopup.offsetHeight;
         settingsPopup.style.display = 'flex';
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -149,11 +154,11 @@ function toggleSettingsMenu() {
     }
 }
 
-// Toggle handlers
 function onThemeSwitchChange(checkbox) {
-    currentTheme = checkbox.checked ? 'light' : 'dark';
-    setTheme(currentTheme);
-    localStorage.setItem('theme', currentTheme);
+    const theme = checkbox.checked ? 'light' : 'dark';
+    setTheme(theme);
+    currentTheme = theme;
+    localStorage.setItem('theme', theme);
 }
 
 function onLogoVisibilityChange(checkbox) {
@@ -174,17 +179,18 @@ function onGameVisibilityChange(checkbox) {
     localStorage.setItem('gameVisible', isGameContainerVisible);
 }
 
-// Theme functions
 function setTheme(theme) {
     const body = document.body;
+    const navbar = document.querySelector('.navbar');
     const navbarLogo = document.getElementById('navbarLogo');
     const games = document.querySelectorAll('.game');
+    const favicon = document.getElementById('favicon');
     
     if (isAnimationsEnabled) {
-        body.classList.remove('animations-off', 'dark-mode', 'light-mode');
-        body.classList.add(`${theme}-mode`);
+        body.classList.remove('animations-off');
+        body.classList.remove('dark-mode', 'light-mode');
+        body.classList.add(theme + '-mode');
         navbarLogo.classList.add('logo-animate');
-        
         if (theme === 'dark') {
             navbarLogo.src = 'images/dmdico.png';
             favicon.href = 'images/dmdico.png';
@@ -200,13 +206,13 @@ function setTheme(theme) {
                 game.style.borderColor = '#ccc';
             });
         }
-        
-        setTimeout(() => navbarLogo.classList.remove('logo-animate'), 250);
+        setTimeout(() => {
+            navbarLogo.classList.remove('logo-animate');
+        }, 250);
     } else {
         body.classList.add('animations-off');
         body.classList.remove('dark-mode', 'light-mode');
-        body.classList.add(`${theme}-mode`);
-        
+        body.classList.add(theme + '-mode');
         if (theme === 'dark') {
             navbarLogo.src = 'images/dmdico.png';
             favicon.href = 'images/dmdico.png';
@@ -227,32 +233,53 @@ function setTheme(theme) {
     updateFooterTheme(theme);
     applySettingsPopupTheme(theme);
     applyLoginPopupTheme(theme);
+    
     localStorage.setItem('theme', theme);
 }
 
-// Toggle functions
 function toggleAnimations(enabled) {
-    document.body.classList.toggle('animations-off', !enabled);
+    const body = document.body;
+    body.classList.toggle('animations-off', !enabled);
     setTheme(currentTheme);
 }
 
 function toggleLogoVisibility(visible) {
-    document.querySelector('.navbar .logo-container').classList.toggle('hidden-logo', !visible);
+    const logoContainer = document.querySelector('.navbar .logo-container');
+    logoContainer.classList.toggle('hidden-logo', !visible);
 }
 
 function toggleGameVisibility(visible) {
-    document.getElementById('gameContainer').classList.toggle('hidden-games', !visible);
+    const gameContainer = document.getElementById('gameContainer');
+    gameContainer.classList.toggle('hidden-games', !visible);
 }
 
-// Login popup functions
+function closeLoginPopup() {
+    const loginPopup = document.getElementById('loginPopup');
+    const overlay = document.getElementById('overlay');
+    
+    // Remove active classes first
+    overlay.classList.remove('overlay-active');
+    loginPopup.classList.remove('login-popup-active');
+    
+    // Wait for animation to complete before hiding
+    setTimeout(() => {
+        loginPopup.style.display = 'none';
+        overlay.style.display = 'none';
+        // Reset z-index after hiding
+        overlay.style.zIndex = '1000';
+    }, 300);
+}
+
 function toggleLoginPopup() {
     const loginPopup = document.getElementById('loginPopup');
     const overlay = document.getElementById('overlay');
     
     if (loginPopup.style.display === 'none' || loginPopup.style.display === '') {
+        // Show popup
         overlay.style.display = 'block';
         loginPopup.style.display = 'block';
-        loginPopup.offsetHeight; // Force reflow
+        // Force reflow
+        loginPopup.offsetHeight;
         overlay.classList.add('overlay-active');
         loginPopup.classList.add('login-popup-active');
     } else {
@@ -260,58 +287,62 @@ function toggleLoginPopup() {
     }
     applyLoginPopupTheme(currentTheme);
 }
-
 function closeLoginPopup() {
     const loginPopup = document.getElementById('loginPopup');
     const overlay = document.getElementById('overlay');
     
-    if (!loginPopup || !overlay) return;
-    
+    // Remove active classes first
     overlay.classList.remove('overlay-active');
     loginPopup.classList.remove('login-popup-active');
     
+    // Wait for animation to complete before hiding
     setTimeout(() => {
         loginPopup.style.display = 'none';
         overlay.style.display = 'none';
+        // Ensure overlay isn't blocking interactions
+        overlay.style.pointerEvents = 'none';
     }, 300);
 }
 
-// Account functions
 function createAccount() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
-    
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+    const username = usernameInput.value;
+    const password = passwordInput.value;
     if (!username || !password) {
         alert("Please enter both username and password.");
         return;
     }
-    
     if (localStorage.getItem(username)) {
         alert("Username already exists. Please choose a different username or login.");
         return;
     }
-    
-    localStorage.setItem(username, encryptData(password));
+    const encryptedPassword = encryptData(password);
+    localStorage.setItem(username, encryptedPassword);
     alert(`Account created for username: ${username} (simulated).\nYou can now login.`);
-    document.getElementById('loginUsername').value = '';
-    document.getElementById('loginPassword').value = '';
+    usernameInput.value = '';
+    passwordInput.value = '';
 }
 
 function login() {
-    const username = document.getElementById('loginUsername').value;
-    const password = document.getElementById('loginPassword').value;
+    const usernameInput = document.getElementById('loginUsername');
+    const passwordInput = document.getElementById('loginPassword');
+    const username = usernameInput.value;
+    const password = passwordInput.value;
     const storedEncryptedPassword = localStorage.getItem(username);
-    
-    if (storedEncryptedPassword && decryptData(storedEncryptedPassword) === password) {
-        loggedInUsername = username;
-        localStorage.setItem('loggedInUsername', loggedInUsername);
-        updateWelcomeMessage();
-        closeLoginPopup();
-        openSettingsMenu();
-        alert(`Login successful for user: ${username} (simulated).`);
-    } else {
-        alert("Login failed. Invalid username or password.");
+    if (storedEncryptedPassword) {
+        const storedPassword = decryptData(storedEncryptedPassword);
+        if (storedPassword === password) {
+            alert(`Login successful for user: ${username} (simulated).`);
+            loggedInUsername = username;
+            localStorage.setItem('loggedInUsername', loggedInUsername);
+            updateWelcomeMessage();
+            closeLoginPopup();
+            openSettingsMenu();
+            return;
+        }
     }
+    alert("Login failed. Invalid username or password.");
 }
 
 function logout() {
@@ -325,7 +356,6 @@ function logout() {
     openSettingsMenu();
 }
 
-// Theme and overlay handlers
 function updateFooterTheme(theme) {
     if (theme === 'light') {
         root.style.setProperty('--footer-bg', '#e5e5e5');
@@ -340,68 +370,34 @@ function updateFooterTheme(theme) {
     }
 }
 
-function handleOverlayClick(event) {
-    if (event.target.id !== 'overlay') return;
-    
+function handleOverlayClick(e) {
     const settingsPopup = document.getElementById('settingsPopup');
     const loginPopup = document.getElementById('loginPopup');
-    const overlay = document.getElementById('overlay');
     
-    if (settingsPopup?.classList.contains('active')) {
-        toggleSettingsMenu();
-    }
-    
-    if (loginPopup?.style.display === 'block') {
-        closeLoginPopup();
+    if (e.target.id === 'overlay') {
+        if (settingsPopup && settingsPopup.classList.contains('active')) {
+            toggleSettingsMenu();
+        }
+        if (loginPopup && loginPopup.style.display === 'block') {
+            closeLoginPopup();
+        }
     }
 }
 
-// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
     setTheme(currentTheme);
     toggleLogoVisibility(isLogoVisible);
     toggleGameVisibility(isGameContainerVisible);
     toggleAnimations(isAnimationsEnabled);
-    
     applySettingsPopupTheme(currentTheme);
     applyLoginPopupTheme(currentTheme);
     updateWelcomeMessage();
-    
     if (localStorage.getItem('logoVisible') === null) {
         localStorage.setItem('logoVisible', 'true');
     }
     isLogoVisible = localStorage.getItem('logoVisible') !== 'false';
     toggleLogoVisibility(isLogoVisible);
-    
-    // Set toggle states
-    const logoToggle = document.getElementById('logoVisibilityToggle');
-    const animationsToggle = document.getElementById('animationsToggle');
-    const gameToggle = document.getElementById('gameVisibilityToggle');
-    if (logoToggle) logoToggle.checked = isLogoVisible;
-    if (animationsToggle) animationsToggle.checked = isAnimationsEnabled;
-    if (gameToggle) gameToggle.checked = isGameContainerVisible;
-    
-    // Set up overlay click handler
-    const overlay = document.getElementById('overlay');
-    if (overlay) {
-        overlay.removeEventListener('click', handleOverlayClick);
-        overlay.addEventListener('click', handleOverlayClick);
-    }
-    
-    // Set up lazy loading
-    const images = document.querySelectorAll('.game-image[data-src]');
-    if (images.length > 0) {
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.onload = () => img.classList.add('loaded');
-                    imageObserver.unobserve(img);
-                }
-            });
-        });
-        
-        images.forEach(img => imageObserver.observe(img));
-    }
+    document.getElementById('logoVisibilityToggle').checked = isLogoVisible;
+    document.getElementById('animationsToggle').checked = isAnimationsEnabled;
+    document.getElementById('overlay').addEventListener('click', handleOverlayClick);
 });

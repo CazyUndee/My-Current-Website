@@ -1,11 +1,12 @@
 body {
-     font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     background-color: #333333;
-     color: white;
-        height: 100vh;
-        margin: 0;
-    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    color: white;
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
+
 body.dark-mode {
     background-color: #333333;
     color: white;
@@ -36,8 +37,7 @@ body.animations-off .navbar {
     align-items: center;
     justify-content: space-between;
     transition: background-color 0.5s ease, color 0.5s ease;
-        margin-bottom: 0; /* MAKE SURE THIS IS HERE */
-    }
+}
 
 body.dark-mode .navbar {
     background-color: #444444;
@@ -159,8 +159,16 @@ body.light-mode .game {
 .game img {
     width: 100%;
     height: auto;
+    object-fit: cover;
+    border-radius: 8px;
     cursor: pointer;
     transition: filter 0.3s ease, transform 0.3s ease;
+    /* Add blur while loading */
+    filter: blur(5px);
+}
+
+.game img.loaded {
+    filter: blur(0);
 }
 
 .game img:hover {
