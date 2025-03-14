@@ -1,4 +1,6 @@
-# My-Website
+# My Project Website
+
+## Introduction
 
 This is my website, it features me and my friends' projects, however, I am not a professional web developer and I am working on this site alone, so the website may not be the best and updates and sites might be in the coming soon phase for a long time. But I am still working on it, and I am always open to suggestions. If you would like to contribute, please feel free to do so.
 
@@ -61,3 +63,7 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 
 ## Contact
 If you would like to contact me, please email me at [cazyundee@gmail.com](mailto:cazyundee@gmail.com)
+
+Thanks for reading this README!
+If you are unhappy about this, wehter you want a certain part removed or for me to add sections, please let me know, feel free to fork this repository and I can approve adding to the official README.
+
