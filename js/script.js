@@ -1,4 +1,10 @@
-const VERSION = '1.8.4 (Beta)';
+const VERSION = '1.9.4 (Beta)';
+
+function resolvePath(relativePath) {
+    const base = document.querySelector('base')?.href || window.location.origin;
+    return new URL(relativePath, base).href;
+}
+
 
 // Global state
 let currentTheme = localStorage.getItem('theme') || 'dark';
@@ -13,7 +19,7 @@ const root = document.documentElement;
 
 // Encryption functions
 function encryptData(password) {
-    let salt = "YOUR_CUSTOM_SALT_VALUE";
+    let salt = "YOUR_CUSTOM_SALT_VALUE";a
     let passwordWithSalt = password + salt;
     let encryptedPassword = "";
     for (let i = 0; i < passwordWithSalt.length; i++) {
@@ -201,7 +207,7 @@ function setTheme(theme) {
             });
         }
         
-        setTimeout(() => navbarLogo.classList.remove('logo-animate'), 250);
+        setTimeout(() => navbarLogo.classLiast.remove('logo-animate'), 250);
     } else {
         body.classList.add('animations-off');
         body.classList.remove('dark-mode', 'light-mode');
