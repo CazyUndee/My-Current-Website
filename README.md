@@ -16,7 +16,7 @@ This is my website, it features me and my friends' projects. However, I am not a
 *   **Welcome Message:** A personalized welcome message.
 *   **Description:** A brief description of the website.
 *   **Game Container:** A section to display games.
-*   **Favourites:** A section to display the user's favourite games.
+*   **Game Buttons** 5 Containers with a title and image of the project catergory.
 
 ## Features - Popups
 
