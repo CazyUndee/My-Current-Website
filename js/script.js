@@ -364,21 +364,22 @@ function handleOverlayClick(event) {
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
+    // Set theme
     setTheme(currentTheme);
     toggleLogoVisibility(isLogoVisible);
     toggleGameVisibility(isGameContainerVisible);
     toggleAnimations(isAnimationsEnabled);
-    
+
     applySettingsPopupTheme(currentTheme);
     applyLoginPopupTheme(currentTheme);
     updateWelcomeMessage();
-    
+
     if (localStorage.getItem('logoVisible') === null) {
         localStorage.setItem('logoVisible', 'true');
     }
     isLogoVisible = localStorage.getItem('logoVisible') !== 'false';
     toggleLogoVisibility(isLogoVisible);
-    
+
     // Set toggle states
     const logoToggle = document.getElementById('logoVisibilityToggle');
     const animationsToggle = document.getElementById('animationsToggle');
@@ -386,14 +387,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoToggle) logoToggle.checked = isLogoVisible;
     if (animationsToggle) animationsToggle.checked = isAnimationsEnabled;
     if (gameToggle) gameToggle.checked = isGameContainerVisible;
-    
+
     // Set up overlay click handler
     const overlay = document.getElementById('overlay');
     if (overlay) {
         overlay.removeEventListener('click', handleOverlayClick);
         overlay.addEventListener('click', handleOverlayClick);
     }
-    
+
     // Set up lazy loading
     const images = document.querySelectorAll('.game-image[data-src]');
     if (images.length > 0) {
@@ -407,7 +408,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-        
+
         images.forEach(img => imageObserver.observe(img));
     }
 });
