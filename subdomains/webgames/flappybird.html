@@ -11,13 +11,16 @@
     <link rel="stylesheet" href="../../css/style.css">
     <style>
         #flappy-container {
-            position: relative;
+            position: relative; /* Important: Make this the positioning context */
             width: 90vw;
             margin: 20px auto;
             background-color: skyblue;
             overflow: hidden;
             max-width: 1000px;
-            margin-top: 60px; /* Add margin below the navbar */
+            margin-top: 60px;
+            height: 500px;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         #bird {
@@ -27,15 +30,23 @@
             background-color: yellow;
             top: 200px;
             left: 100px;
+            z-index: 2;
+            transition: transform 0.1s ease-in-out;
         }
 
         .pipe {
             position: absolute;
             width: 50px;
             background-color: green;
+            z-index: 1;
         }
+
         .pipe-top {
             top: 0;
+        }
+
+        .pipe-bottom {
+            bottom: 0;
         }
 
         .score {
@@ -60,16 +71,58 @@
             text-align: center;
             z-index: 10;
         }
-        #game-over button {
+
+        #game-over button, #start-menu button, #about-menu button {
             border-radius: 10px;
             background-color: var(--footer-bg);
             color: white;
             border: none;
-            padding: 10px;
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 18px;
+            min-width: 150px;
+        }
+
+        #start-menu, #about-menu {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 15;
+            min-width: 350px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #about-menu {
+            gap: 20px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            display:flex;
+        }
+
+        #start-menu {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        #start-menu h2, #about-menu h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
         }
     </style>
 </head>
-<body class="dark-mode" style="min-height: 100vh; margin: 0; display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif;">
+<body class="dark-mode page-loaded" style="min-height: 100vh; margin: 0; display: flex; flex-direction: column; font-family: 'Montserrat', sans-serif;">
     <div style="flex: 1;">
         <div id="overlay"></div>
         <div id="loginPopup">
@@ -91,14 +144,23 @@
             </div>
             <div class="right-items">
                 <button class="login-button" onclick="toggleLoginPopup()">Login/Create Account</button>
-                <div class="settings-wrapper" onclick="toggleSettingsMenu()">
-                    <span class="settings-emoji">⚙</span>
-                    <span class="settings-text">Settings</span>
-                </div>
             </div>
         </div>
-
-        <div id="flappy-container">
+        
+        <div id="flappy-container"> <!-- Added menus inside the container -->
+            <div id="start-menu">
+                <h2>Flappy Bird</h2>
+                <button onclick="startGame()">Start Game</button>
+                <button onclick="openAbout()">About</button>
+            </div>
+            <div id="about-menu">
+                <h2>About</h2>
+                <div>
+                    <p>Flappy Bird Game</p>
+                    <p>Version: 1.0</p>
+                </div>
+                <button onclick="closeAbout()">Close</button>
+            </div>
             <div id="bird"></div>
             <div class="score">0</div>
             <div id="game-over">
@@ -115,36 +177,31 @@
             const scoreDisplay = document.querySelector('.score');
             const gameOverScreen = document.getElementById('game-over');
             const finalScoreDisplay = document.getElementById('final-score');
-            const navbar = document.querySelector('.navbar');
-            const footer = document.querySelector('footer');
+            const startMenu = document.getElementById('start-menu');
+            const aboutMenu = document.getElementById('about-menu');
 
             let birdY = 200;
             let velocity = 0;
-            const gravity = 0.5;
-            const jumpHeight = -10;
+            const gravity = 0.3;
+            const jumpHeight = -7;
             let score = 0;
             let pipes = [];
-            let gameRunning = true;
+            let gameRunning = false;
             let gapHeight = 150;
-            let pipeInterval = 2500;
-
-            function updateContainerHeight() {
-                const navbarHeight = navbar.offsetHeight;
-                const footerHeight = footer.offsetHeight;
-                const availableHeight = window.innerHeight - navbarHeight - footerHeight;
-                container.style.height = `${availableHeight}px`;
-                
-                birdY = container.clientHeight / 2;
-                bird.style.top = birdY + 'px';
-                
-                
-            }
+            let pipeInterval = 2000;
+            let pipeSpeed = 2;
+            let gameLoopInterval;
+            let pipeCreationInterval;
+            let rotationAngle = 0;
 
             function updateBird() {
                 if (!gameRunning) return;
                 velocity += gravity;
                 birdY += velocity;
                 bird.style.top = birdY + 'px';
+                
+                rotationAngle = Math.max(-45, Math.min(45, velocity * 5));
+                bird.style.transform = `rotate(${rotationAngle}deg)`;
 
                 if (birdY < 0 || birdY > container.clientHeight - bird.clientHeight) {
                     gameOver();
@@ -158,30 +215,29 @@
 
             function createPipe() {
                 if (!gameRunning) return;
-                const pipeHeight = Math.floor(Math.random() * (container.clientHeight - gapHeight - 200)) + 100;
-                gapHeight = Math.min(gapHeight, container.clientHeight - pipeHeight - 100);
-
+                const pipeHeight = Math.floor(Math.random() * (container.clientHeight - gapHeight - 100)) + 50;
+            
                 const pipeTop = document.createElement('div');
                 const pipeBottom = document.createElement('div');
-
+            
                 pipeTop.style.width = '50px';
                 pipeBottom.style.width = '50px';
                 pipeTop.style.backgroundColor = 'green';
                 pipeBottom.style.backgroundColor = 'green';
-
+            
                 pipeTop.className = 'pipe pipe-top';
-                pipeBottom.className = 'pipe';
-
+                pipeBottom.className = 'pipe pipe-bottom';
+            
                 pipeTop.style.height = pipeHeight + 'px';
                 pipeBottom.style.height = container.clientHeight - pipeHeight - gapHeight + 'px';
-
+            
                 const pipeX = container.clientWidth;
                 pipeTop.style.left = pipeX + 'px';
                 pipeBottom.style.left = pipeX + 'px';
-
+            
                 container.appendChild(pipeTop);
                 container.appendChild(pipeBottom);
-
+            
                 pipes.push({ top: pipeTop, bottom: pipeBottom, x: pipeX });
             }
 
@@ -190,13 +246,12 @@
                 for (let i = pipes.length - 1; i >= 0; i--) {
                     const pipe = pipes[i];
 
-                    // Check for collision *before* moving the pipe
                     if (checkCollision(pipe)) {
                         gameOver();
-                        return; // Exit the function after game over
+                        return;
                     }
 
-                    pipe.x -= 2;
+                    pipe.x -= pipeSpeed;
                     pipe.top.style.left = pipe.x + 'px';
                     pipe.bottom.style.left = pipe.x + 'px';
 
@@ -214,12 +269,19 @@
                 const birdRect = bird.getBoundingClientRect();
                 const topPipeRect = pipe.top.getBoundingClientRect();
                 const bottomPipeRect = pipe.bottom.getBoundingClientRect();
-
+            
                 if (birdRect.left < topPipeRect.right && birdRect.right > topPipeRect.left) {
-                    if (birdRect.top < topPipeRect.bottom || birdRect.bottom > bottomPipeRect.top) {
+                    if (birdRect.top < topPipeRect.bottom) {
                         return true;
                     }
                 }
+            
+                if (birdRect.left < bottomPipeRect.right && birdRect.right > bottomPipeRect.left) {
+                    if (birdRect.bottom > bottomPipeRect.top) {
+                        return true;
+                    }
+                }
+            
                 return false;
             }
 
@@ -227,6 +289,8 @@
                 gameRunning = false;
                 gameOverScreen.style.display = 'block';
                 finalScoreDisplay.textContent = score;
+                clearInterval(gameLoopInterval);
+                clearInterval(pipeCreationInterval);
             }
 
             function restartGame() {
@@ -239,19 +303,40 @@
                     pipe.bottom.remove();
                 });
                 pipes = [];
-                gameRunning = true;
                 gameOverScreen.style.display = 'none';
                 bird.style.top = birdY + 'px';
+                bird.style.transform = `rotate(0deg)`;
+                startMenu.style.display = 'flex';
+            }
+
+            function startGame() {
+                startMenu.style.display = 'none';
+                gameRunning = true;
+
+                gameLoopInterval = setInterval(() => {
+                    updateBird();
+                    updatePipes();
+                }, 16);
+                pipeCreationInterval = setInterval(createPipe, pipeInterval);
                 createPipe();
             }
 
-            updateContainerHeight()
+            function openAbout() {
+                startMenu.style.display = 'none';
+                aboutMenu.style.display = 'flex';
+            }
 
-            setInterval(updateBird, 20);
-            setInterval(updatePipes, 20);
-            setInterval(createPipe, pipeInterval);
+            function closeAbout() {
+                aboutMenu.style.display = 'none';
+                startMenu.style.display = 'flex';
+            }
 
             document.addEventListener('click', jump);
+            document.addEventListener('touchstart', (event) => {
+                event.preventDefault();
+                jump();
+            });
+            
             restartGame();
         </script>
     </div>
@@ -276,20 +361,20 @@
             <div style="padding: 10px 0;">
                 <h3 style="font-size: 16px; margin-bottom: 10px;">Quick Links</h3>
                 <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Popular Games</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">New Releases</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Community</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Support</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Popular Games</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">New Releases</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Community</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Support</a></li>
                 </ul>
             </div>
 
             <div style="padding: 10px 0;">
                 <h3 style="font-size: 16px; margin-bottom: 10px;">Connect</h3>
                 <ul style="list-style: none; padding: 0; margin: 0;">
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Discord</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Twitter</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">YouTube</a></li>
-                    <li style="margin-bottom: 8px;"><a href="subdomains/not-ready-yet/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Instagram</a></li>
+                    <li style="margin-bottom: 8px;"><a href="subdomains/" style="text-decoration: none; font-size: 13px; color: inherit;">Discord</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">Twitter</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.html" style="text-decoration: none; font-size: 13px; color: inherit;">YouTube</a></li>
+                    <li style="margin-bottom: 8px;"><a href="../subdomains/not-ready-yet.htmll" style="text-decoration: none; font-size: 13px; color: inherit;">Instagram</a></li>
                 </ul>
             </div>
 
