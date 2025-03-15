@@ -4,7 +4,36 @@
 
 This is my website, it features me and my friends' projects, however, I am not a professional web developer and I am working on this site alone, so the website may not be the best and updates and sites might be in the coming soon phase for a long time. But I am still working on it, and I am always open to suggestions. If you would like to contribute, please feel free to do so.
 
-## Features
+## Features*   **Navigation:**
+
+    *   **Navbar:** A fixed navigation bar at the top of the page.
+    *   **Logo:** A clickable logo that can be shown or hidden.
+    *   **Login Button:** A button to access the login/account creation popup.
+    *   **Settings Button:** A button to open the settings menu.
+*   **Content:**
+
+    *   **Welcome Message:** A personalized welcome message.
+    *   **Description:** A brief description of the website.
+    *   **Game Container:** A section to display games.
+    *   **Favourites:** A section to display the user's favourite games.
+*   **Popups:**
+
+    *   **Settings Popup:** A popup menu to manage website settings.
+    *   **Login Popup:** A popup for user login and account creation.
+*   **Functionality:**
+    *   **Theme Switching:** Users can switch between light and dark themes.
+    *   **Logo Visibility:** Users can choose to show or hide the website logo.
+    *   **Animation Control:** Users can enable or disable animations.
+    *   **Lazy Loading:** Images are loaded only when they come into view, improving performance.
+    *   **Simulated Account System:** Users can create a simulated account or log in.
+    *   **Username Persistence:** The logged-in username is remembered.
+    *   **Logout:** Users can log out of their account.
+    *   **Password Encryption:** Passwords are encrypted for security (basic, simulated encryption).
+    *   **Settings Menu:** A centralized location to manage theme, logo visibility, animations, and account settings.
+    * **Game Visibility Toggle:** A development-focused feature to hide or show the game container section.
+    * **Version Display:** The current website version is displayed in the settings menu.
+    * **Overlay:** A semi-transparent overlay is used to highlight the settings and login popups.
+
 
 This website offers a variety of features, including:
 
