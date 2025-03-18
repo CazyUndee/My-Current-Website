@@ -95,17 +95,17 @@ This website offers a range of carefully designed features to enhance the user e
 *   **Version Display:** The current website version is displayed in the settings menu, keeping users informed of the latest build and its potential changes. 🔢
 *   **Overlay:** A semi-transparent overlay is used to highlight the settings and login popups, focusing user attention on these interactive elements. 🌫️
 
-## 👨‍💻 Technologies Used 👩‍💻
+##  Technical Details for Nerds 🤓
 
 This website is meticulously crafted using the following technologies, chosen for their effectiveness and the learning opportunities they offer:
 
-### Core Web Technologies
+### Core Web Technologies 🤓🤓
 
 *   **HTML5:** The foundational language for structuring the content of the website. I leverage semantic HTML5 elements to ensure proper document structure and accessibility. 🧱
 *   **CSS3:** Used for styling and layout, with a focus on responsive design. I utilize CSS variables for theming and flexbox/grid for flexible layouts. 🎨
 *   **JavaScript (ES6+):** The dynamic heart of the website, providing interactivity, dynamic features, and all of the website's logic. The code is well-commented and organized into functional modules. 🎛️
 
-### Libraries/Frameworks
+### Libraries/Frameworks 🤓🤓🤓
 
 *   **Vanilla JavaScript (No External Libraries):** This project is intentionally built without external JavaScript libraries or frameworks. This decision was made to deepen my understanding of core JavaScript principles and DOM manipulation. It also minimizes dependencies and improves control over performance. 💪
 
@@ -115,18 +115,18 @@ This website is meticulously crafted using the following technologies, chosen fo
 *   **GitHub:** The cornerstone of version control and collaboration. 🐙
 *   **Vercel:** Employed for real-time hosting and deployment, Vercel provides fast, reliable hosting, and seamless integration with GitHub. 🚀
 
-### Techniques
+### Techniques 🤓🤓🤓🤓🤓🤓🤓🤓
 
 *   **Local Storage:** Used for persisting user preferences (e.g., theme, logo visibility, animations, game visibility) and account information. Local storage allows the website to retain user settings across sessions without relying on server-side databases. 💾
 *   **DOM Manipulation:** Leveraged to dynamically update the page content based on user interactions and preferences. 🎛️
 *   **CSS Classes:** Used extensively for styling and toggling visibility, making it easy to dynamically change the state and appearance of elements. 🏷️
 *   **Encryption:** While basic and simulated, encryption is used to demonstrate password security and to show an understanding of its importance. 🔐
-*   **Intersection Observer:** This powerful API is used to implement lazy loading, ensuring images are only loaded when they come into the viewport, significantly improving performance and load times. 👀
-*   **Reflow Management:** Techniques are applied to minimize reflows and repaints, ensuring smooth transitions and a responsive user experience. 🔄
+*   **Intersection Observer:** This powerful API is used to implement lazy loading, ensuring images are only loaded when they come into the viewport, significantly improving performance and load times. 
+*   **Reflow Management:** Techniques are applied to minimize reflows and repaints, ensuring smooth transitions and a responsive user experience. 
 *   **Event Handling:** An integral part of the JavaScript code, enabling the website to respond to user interactions and provide a dynamic experience. 👂
 *   **Resolve Path:** Implemented for correctly resolving relative paths to assets, ensuring that images and other resources are loaded correctly. 🗺️
 *   **Media Queries:** Used to apply styles for different screen sizes, ensuring responsiveness across various devices. 🖥️📱
-*   **CSS Animations:** Used for visual feedback and to enhance user experience. 🤸
+*   **CSS Animations:** Used for visual feedback and to enhance user experience. 
 *   **Transitions:** Used for creating a smooth and fluid user experience. 〰️
 
 ## 🛠️ Setup and Installation (For Contributors) 🛠️
@@ -211,11 +211,11 @@ Here's how the website looks:
 <hr>
 
 
-## 📄 License 📄
+##  License 📄
 
 This project is licensed under the MIT License - see the `LICENSE.md` file for details. 📜
 
-## 🙌 Acknowledgments 🙌
+##  Acknowledgments 🙌
 
 *   [GitHub](https://github.com/) 🐙
 *   [Google Fonts](https://fonts.google.com/) 🖋️
@@ -224,7 +224,7 @@ This project is licensed under the MIT License - see the `LICENSE.md` file for d
 
 Forking this repository is not just a way to contribute—it's a celebration of collaborative creativity! 🎉 If you find yourself inspired to modify, experiment, or build upon this project, I wholeheartedly encourage you to fork it. 🍴 Here's why and how:
 
-### 🤔 Why Fork? 🤔
+###  Why Fork? 🤔
 
 *   **Experimentation:** Forking creates a personal copy of the project where you can freely experiment with changes without affecting the main project. 🧪
 *   **Personalization:** You can tailor the website to your liking, adding your own features or modifying existing ones. ✨
