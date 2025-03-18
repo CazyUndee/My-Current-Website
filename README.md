@@ -210,7 +210,6 @@ Here's how the website looks:
 </p>
 <hr>
 
-*Add more images here if necessary*
 
 ## 📄 License 📄
 
