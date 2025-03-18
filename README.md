@@ -147,7 +147,9 @@ If you're interested in running this website locally or contributing to its deve
 I warmly welcome contributions to this project! ❤️ If you'd like to help improve the website, please follow these guidelines:
 
 1.  **Fork the Repository:** Start by forking the repository to your own GitHub account. 🍴
+
 2.  **Create a Branch:** Create a new branch for your feature or bug fix:
+
     ```bash
     git checkout -b feature/your-feature-name
     ```
@@ -156,11 +158,13 @@ I warmly welcome contributions to this project! ❤️ If you'd like to help imp
     git checkout -b fix/your-fix-name
     ```
     🌿
+
 3.  **Coding Standards:**
     *   Use clear and concise variable and function names. 📝
     *   Comment your code to explain complex logic. 💬
     *   Indent your code consistently (2 spaces are preferred). ➡️➡️
     *   Follow existing code patterns and style. 🎨
+    
 4.  **Testing:** Thoroughly test your changes to ensure they work as expected and don't introduce new issues. 🧪
 5.  **Commit Messages:** Write clear, informative commit messages that explain what you changed and why. ✍️
 6.  **Submit a Pull Request:** Once your changes are ready, submit a pull request to the `main` branch. I'll review it and merge it if it meets the project's quality standards. ✅
