@@ -181,26 +181,35 @@ Here are some of my exciting goals for the website's future: 🚀
 
 Here's how the website looks:
 
-### Home Page
----
-![Home Page](https://i.imgur.com/CVWQesC.png)
-<p style="font-size: 14px; margin-top: 5px;">This is the home page of the website, it shows the navbar, the welcome, the description, the games, and the footer.</p>
----
-### Login Popup
----
-![Login Popup](https://i.imgur.com/n6q9meb.png)
-<p style="font-size: 14px; margin-top: 5px;">This is the login popup, it has a clean design and it includes the options to login or create an account.</p>
----
-### Settings Popup
----
-![Settings Popup](https://i.imgur.com/TUSngVT.png)
-<p style="font-size: 14px; margin-top: 5px;">This is the settings popup, it allows the user to change the theme, the logo visibility, the animations, and the game visibility. It also shows the current version and the option to logout.</p>
----
-### Flappy Bird
----
-![Flappy Bird](https://i.imgur.com/QH2E6Cf.png)
-<p style="font-size: 14px; margin-top: 5px;">This shows the Flappy Bird game.</p>
----
+<h3>Home Page</h3>
+<hr>
+<img src="https://i.imgur.com/CVWQesC.png" alt="Home Page" style="width:100%; max-width:600px;">
+<p style="font-size: 14px; margin-top: 5px;">
+    This is the home page of the website. It shows the navbar, the welcome, the description, the games, and the footer.
+</p>
+<hr>
+<h3>Login Popup</h3>
+<hr>
+<img src="https://i.imgur.com/n6q9meb.png" alt="Login Popup" style="width:100%; max-width:600px;">
+<p style="font-size: 14px; margin-top: 5px;">
+    This is the login popup. It has a clean design and it includes the options to login or create an account.
+</p>
+<hr>
+<h3>Settings Popup</h3>
+<hr>
+<img src="https://i.imgur.com/TUSngVT.png" alt="Settings Popup" style="width:100%; max-width:600px;">
+<p style="font-size: 14px; margin-top: 5px;">
+    This is the settings popup. It allows the user to change the theme, the logo visibility, the animations, and the game visibility. It also shows the current version and the option to logout.
+</p>
+<hr>
+<h3>Flappy Bird</h3>
+<hr>
+<img src="https://i.imgur.com/QH2E6Cf.png" alt="Flappy Bird" style="width:100%; max-width:600px;">
+<p style="font-size: 14px; margin-top: 5px;">
+    This shows the Flappy Bird game.
+</p>
+<hr>
+
 *Add more images here if necessary*
 
 ## 📄 License 📄
