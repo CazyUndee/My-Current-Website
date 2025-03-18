@@ -184,26 +184,22 @@ Here's how the website looks:
 ### Home Page
 ---
 ![Home Page](https://i.imgur.com/CVWQesC.png)
-
-This is the home page of the website, it shows the navbar, the welcome, the description, the games, and the footer.
+<p style="font-size: 14px; margin-top: 5px;">This is the home page of the website, it shows the navbar, the welcome, the description, the games, and the footer.</p>
 ---
 ### Login Popup
 ---
 ![Login Popup](https://i.imgur.com/n6q9meb.png)
-
-This is the login popup, it has a clean design and it includes the options to login or create an account.
+<p style="font-size: 14px; margin-top: 5px;">This is the login popup, it has a clean design and it includes the options to login or create an account.</p>
 ---
 ### Settings Popup
 ---
-![Settings popup](https://i.imgur.com/TUSngVT.png)
-
-This is the settings popup, it allows the user to change the theme, the logo visibility, the animations and the game visibility. It also shows the current version and the option to logout.
+![Settings Popup](https://i.imgur.com/TUSngVT.png)
+<p style="font-size: 14px; margin-top: 5px;">This is the settings popup, it allows the user to change the theme, the logo visibility, the animations, and the game visibility. It also shows the current version and the option to logout.</p>
 ---
 ### Flappy Bird
 ---
 ![Flappy Bird](https://i.imgur.com/QH2E6Cf.png)
-
-This shows the flappy bird game.
+<p style="font-size: 14px; margin-top: 5px;">This shows the Flappy Bird game.</p>
 ---
 *Add more images here if necessary*
 
