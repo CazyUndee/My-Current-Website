@@ -1,3 +1,4 @@
+appybird.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,15 +23,18 @@
             display: flex;
             flex-direction: column;
             font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         #flappy-container {
             position: relative;
-            width: 100%;
-            flex: 1;
-            margin: 0 auto;
-            background-color: skyblue;
+            width: 90vw;
+            max-width: 1000px;
+            height: calc(90vw * 0.5625);
+            max-height: calc(1000px * 0.5625);
+            margin: 20px auto;
+            margin-top: 60px;
+            background-color: #4EC0CA;
             overflow: hidden;
             user-select: none;
             touch-action: manipulation;
@@ -38,29 +42,53 @@
 
         #bird {
             position: absolute;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 24px;
             top: 200px;
             left: 100px;
             z-index: 2;
             transition: transform 0.1s ease-in-out;
             background-color: yellow;
             background-image: url('../../images/bird.png');
-            background-size: cover;
+            background-size: contain;
+            background-repeat: no-repeat;
             background-position: center;
         }
 
         .pipe {
             position: absolute;
-            width: 50px;
-            background-color: green;
+            width: 52px;
+            background: linear-gradient(90deg, #74BF2E 0%, #9BEB3C 15%, #74BF2E 30%);
             z-index: 1;
-            border: 3px solid darkgreen;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            border: 2px solid #4A7B1E;
         }
 
-        .pipe-top { top: 0; }
-        .pipe-bottom { bottom: 0; }
+        .pipe::before {
+            content: '';
+            position: absolute;
+            width: 64px;
+            height: 30px;
+            background: linear-gradient(90deg, #74BF2E 0%, #9BEB3C 15%, #74BF2E 30%);
+            border: 2px solid #4A7B1E;
+            left: -8px;
+        }
+
+        .pipe-top { 
+            top: 0; 
+        }
+
+        .pipe-top::before {
+            bottom: -2px;
+            top: auto;
+        }
+
+        .pipe-bottom { 
+            bottom: 0; 
+        }
+
+        .pipe-bottom::before {
+            top: -30px;
+        }
 
         .score {
             position: absolute;
@@ -68,6 +96,7 @@
             left: 10px;
             font-size: 24px;
             color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
 
@@ -133,6 +162,13 @@
             cursor: pointer;
             font-size: 18px;
             min-width: 150px;
+            transition: background-color 0.2s;
+        }
+
+        #game-over button:hover,
+        #start-menu button:hover,
+        #about-menu button:hover {
+            background-color: #444;
         }
     </style>
 </head>
@@ -190,13 +226,11 @@
         let pipes = [];
         let gameRunning = false;
         let gapHeight = 150;
-        let pipeInterval = 2000;
         let pipeSpeed = 2;
         let gameLoopInterval;
         let pipeCreationInterval;
         let rotationAngle = 0;
 
-        // Game functions
         function updateBird() {
             if (!gameRunning) return;
             velocity += gravity;
@@ -242,7 +276,7 @@
             if (!gameRunning) return;
             for (let i = pipes.length - 1; i >= 0; i--) {
                 const pipe = pipes[i];
-
+                
                 if (checkCollision(pipe)) {
                     gameOver();
                     return;
@@ -284,7 +318,7 @@
             gameOverScreen.style.display = 'block';
             finalScoreDisplay.textContent = score;
             clearInterval(gameLoopInterval);
-            clearInterval(pipeCreationInterval);
+            clearTimeout(pipeCreationInterval);
         }
 
         function restartGame() {
@@ -310,14 +344,14 @@
                 updateBird();
                 updatePipes();
             }, 16);
-            pipeCreationInterval = setInterval(() => {
-        createPipe();
-        // Randomize next pipe interval
-        clearInterval(pipeCreationInterval);
-        pipeCreationInterval = setInterval(createPipe, Math.random() * 500 + 1750); // Random interval between 1.75-2.25s
-    }, pipeInterval);
-    createPipe();
+            scheduleNextPipe();
+        }
 
+        function scheduleNextPipe() {
+            if (!gameRunning) return;
+            createPipe();
+            const nextInterval = Math.random() * 500 + 1750; // Random interval between 1.75-2.25s
+            pipeCreationInterval = setTimeout(scheduleNextPipe, nextInterval);
         }
 
         function openAbout() {
