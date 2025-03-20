@@ -45,7 +45,7 @@
             z-index: 2;
             transition: transform 0.1s ease-in-out;
             background-color: yellow;
-            background-image: url('images/flappybird.png');
+            background-image: url('../../images/bird.png');
             background-size: cover;
             background-position: center;
         }
@@ -310,8 +310,14 @@
                 updateBird();
                 updatePipes();
             }, 16);
-            pipeCreationInterval = setInterval(createPipe, pipeInterval);
-            createPipe();
+            pipeCreationInterval = setInterval(() => {
+        createPipe();
+        // Randomize next pipe interval
+        clearInterval(pipeCreationInterval);
+        pipeCreationInterval = setInterval(createPipe, Math.random() * 500 + 1750); // Random interval between 1.75-2.25s
+    }, pipeInterval);
+    createPipe();
+
         }
 
         function openAbout() {
