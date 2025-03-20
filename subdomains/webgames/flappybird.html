@@ -47,7 +47,7 @@
     left: 100px;
     z-index: 2;
     transition: transform 0.1s ease-in-out;
-    background-image: url('../../images/bird-yellow.png');
+    background-image: url('../../images/bird.png');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -86,39 +86,12 @@
 
 
 .pipe {
-    position: absolute;
-    width: 52px;
-    background: #008000; /* Base green color */
-    z-index: 1;
-    image-rendering: pixelated;
-    border: none;
-}
-
-.pipe::before {
-    content: '';
-    position: absolute;
-    width: 64px;
-    height: 26px;
-    left: -6px;
-    background: #008000; /* Base green color */
-    image-rendering: pixelated;
-}
-
-/* Main pipe body */
-.pipe-top {
-    top: 0;
-    background: #008000;
-    box-shadow: 
-        inset 0 -4px 0 0 #004000,
-        inset 0 4px 0 0 #00C000;
-}
-
-.pipe-bottom {
-    bottom: 0;
-    background: #008000;
-    box-shadow: 
-        inset 0 -4px 0 0 #004000,
-        inset 0 4px 0 0 #00C000;
+  width: 80px; /* Adjust width to fit your game */
+  height: 400px; /* Adjust height for pipe length */
+  background-image: url('assets/images/pipe.png'); /* Replace with the correct image path */
+  background-size: cover; /* Ensures the image scales to fit the pipe */
+  background-repeat: no-repeat; /* Prevents the image from tiling */
+  border-radius: 4px; /* Optional: Rounded edges for a smooth look */
 }
 
 /* Pipe caps */
