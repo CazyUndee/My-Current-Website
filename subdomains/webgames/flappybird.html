@@ -11,6 +11,12 @@
     <link rel="icon" id="favicon" href="../images/dmdico.png" type="image/png">
     <link rel="stylesheet" href="../../css/style.css">
     <style>
+        :root {
+            --footer-bg: #333; /* Example color */
+            --footer-border: #555; /* Example color */
+            --input-bg: #222; /* Example color */
+        }
+
         #flappy-container {
             position: relative;
             /* Important: Make this the positioning context */
@@ -29,19 +35,14 @@
             position: absolute;
             width: 30px;
             height: 30px;
-            background-color: yellow;
             top: 200px;
             left: 100px;
             z-index: 2;
             transition: transform 0.1s ease-in-out;
-            /* Add this line */
-            background-color: transparent;
-            /* Remove the yellow background */
             background-image: url('../images/bird.png');
             /* Add a bird image */
             background-size: cover;
             background-position: center;
-
         }
 
         .pipe {
