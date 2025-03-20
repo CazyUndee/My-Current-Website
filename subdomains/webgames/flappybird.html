@@ -32,19 +32,18 @@
         }
 
         #bird {
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            top: 200px;
-            left: 100px;
-            z-index: 2;
-            transition: transform 0.1s ease-in-out;
-            background-image: url('../images/bird.png');
-            /* Add a bird image */
-            background-size: cover;
-            background-position: center;
-        }
-
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: 200px;
+    left: 100px;
+    z-index: 2;
+    transition: transform 0.1s ease-in-out;
+    background-color: yellow; /* Temporary color if image fails to load */
+    background-image: url('../../images/bird.png'); /* Updated path */
+    background-size: cover;
+    background-position: center;
+}
         .pipe {
             position: absolute;
             width: 50px;
@@ -100,43 +99,42 @@
             font-size: 18px;
             min-width: 150px;
         }
-
         #start-menu {
-        display: flex; /* Ensure only the start menu is visible initially */
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    z-index: 15;
+}
 
-        #about-menu {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 40px;
-            border-radius: 10px;
-            text-align: center;
-            z-index: 15;
-            min-width: 350px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        #about-menu {
-            gap: 20px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            display: none;
-        }
-
-        #start-menu {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-        }
+#about-menu {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    z-index: 15;
+    min-width: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
 
         #start-menu h2,
         #about-menu h2 {
