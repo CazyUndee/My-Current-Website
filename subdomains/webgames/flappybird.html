@@ -56,40 +56,71 @@ appybird.html
         }
 
         .pipe {
-            position: absolute;
-            width: 52px;
-            background: linear-gradient(90deg, #74BF2E 0%, #9BEB3C 15%, #74BF2E 30%);
-            z-index: 1;
-            border: 2px solid #4A7B1E;
-        }
+    position: absolute;
+    width: 52px;
+    background: #73BF2E;
+    z-index: 1;
+    border: 2px solid #4A7B1E;
+}
 
-        .pipe::before {
-            content: '';
-            position: absolute;
-            width: 64px;
-            height: 30px;
-            background: linear-gradient(90deg, #74BF2E 0%, #9BEB3C 15%, #74BF2E 30%);
-            border: 2px solid #4A7B1E;
-            left: -8px;
-        }
+.pipe::before {
+    content: '';
+    position: absolute;
+    width: 58px;
+    height: 26px;
+    background: #73BF2E;
+    border: 2px solid #4A7B1E;
+    left: -5px;
+}
 
-        .pipe-top { 
-            top: 0; 
-        }
+.pipe-top { 
+    top: 0;
+    background: linear-gradient(90deg, 
+        #73BF2E 0%, 
+        #73BF2E 5%,
+        #9CD94A 6%,
+        #9CD94A 9%,
+        #73BF2E 10%,
+        #73BF2E 100%
+    );
+}
 
-        .pipe-top::before {
-            bottom: -2px;
-            top: auto;
-        }
+.pipe-top::before {
+    bottom: -2px;
+    top: auto;
+    background: linear-gradient(90deg, 
+        #73BF2E 0%, 
+        #73BF2E 5%,
+        #9CD94A 6%,
+        #9CD94A 9%,
+        #73BF2E 10%,
+        #73BF2E 100%
+    );
+}
 
-        .pipe-bottom { 
-            bottom: 0; 
-        }
+.pipe-bottom { 
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        #73BF2E 0%, 
+        #73BF2E 5%,
+        #9CD94A 6%,
+        #9CD94A 9%,
+        #73BF2E 10%,
+        #73BF2E 100%
+    );
+}
 
-        .pipe-bottom::before {
-            top: -30px;
-        }
-
+.pipe-bottom::before {
+    top: -26px;
+    background: linear-gradient(90deg, 
+        #73BF2E 0%, 
+        #73BF2E 5%,
+        #9CD94A 6%,
+        #9CD94A 9%,
+        #73BF2E 10%,
+        #73BF2E 100%
+    );
+}
         .score {
             position: absolute;
             top: 10px;
