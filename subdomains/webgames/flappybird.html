@@ -46,7 +46,7 @@ flappybird.html
             z-index: 2;
             transition: transform 0.1s ease-in-out;
             background-color: yellow;
-            background-image: url('../../images/bird.png');
+            background-image: url('webgames/images/flappy-bird.png');
             background-size: cover;
             background-position: center;
         }
@@ -265,6 +265,8 @@ flappybird.html
 
         function checkCollision(pipe) {
             const birdRect = bird.getBoundingClientRect();
+            if (!pipe.top || !pipe.bottom) return false;
+
             const topPipeRect = pipe.top.getBoundingClientRect();
             const bottomPipeRect = pipe.bottom.getBoundingClientRect();
 
