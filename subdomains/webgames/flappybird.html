@@ -40,79 +40,63 @@
         }
 
         #bird {
-    position: absolute;
-    width: 40px;
-    height: 30px;
-    top: 200px;
-    left: 100px;
-    z-index: 2;
-    transition: transform 0.1s ease-in-out;
-    background-image: url('../../images/bird.png');
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
-    border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    animation: flap 0.5s infinite;
-}
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            top: 200px;
+            left: 100px;
+            z-index: 2;
+            background-image: url('../../images/bird.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            animation: flap 0.5s infinite;
+        }
 
-@keyframes flap {
-    0% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(-10deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
+        @keyframes flap {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-10deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
 
-#bird.flap {
-    animation: flap-fast 0.2s infinite;
-}
+        #bird.flap {
+            animation: flap-fast 0.2s infinite;
+        }
 
-@keyframes flap-fast {
-    0% {
-        transform: rotate(0deg);
-    }
-    50% {
-        transform: rotate(-20deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
+        @keyframes flap-fast {
+            0% {
+                transform: rotate(0deg);
+            }
+            50% {
+                transform: rotate(-20deg);
+            }
+            100% {
+                transform: rotate(0deg);
+            }
+        }
 
+        .pipe {
+            position: absolute; /* Important: Make pipes absolutely positioned */
+            width: 80px;
+            background-color: green;
+        }
 
-.pipe {
-  width: 80px; /* Adjust width to fit your game */
-  height: 400px; /* Adjust height for pipe length */
-  background-image: url('../../images/pipe.jpg'); /* Replace with the correct image path */
-  background-size: cover; /* Ensures the image scales to fit the pipe */
-  background-repeat: no-repeat; /* Prevents the image from tiling */
-  border-radius: 4px; /* Optional: Rounded edges for a smooth look */
-}
+        .pipe-top {
+            bottom: 0;
+        }
 
-/* Pipe caps */
-.pipe-top::before {
-    bottom: -2px;
-    top: auto;
-    background: #008000;
-    box-shadow: 
-        inset 0 -4px 0 0 #004000,
-        inset 0 4px 0 0 #00C000,
-        inset -4px 0 0 0 #004000;
-}
+        .pipe-bottom {
+            top: 0;
+        }
 
-.pipe-bottom::before {
-    top: -24px;
-    background: #008000;
-    box-shadow: 
-        inset 0 -4px 0 0 #004000,
-        inset 0 4px 0 0 #00C000,
-        inset -4px 0 0 0 #004000;
-}
         .score {
             position: absolute;
             top: 10px;
@@ -253,6 +237,9 @@
         let gameLoopInterval;
         let pipeCreationInterval;
         let rotationAngle = 0;
+        const pipeWidth = 80; // Define pipe width
+        const minPipeHeight = 50; // Minimum pipe height
+        const maxPipeHeight = container.clientHeight - gapHeight - minPipeHeight;
 
         function updateBird() {
             if (!gameRunning) return;
@@ -274,7 +261,14 @@
 
         function createPipe() {
             if (!gameRunning) return;
-            const pipeHeight = Math.floor(Math.random() * (container.clientHeight - gapHeight - 100)) + 50;
+
+            let pipeHeight = Math.floor(Math.random() * maxPipeHeight) + minPipeHeight;
+            if (pipeHeight > container.clientHeight - gapHeight - minPipeHeight) {
+                pipeHeight = container.clientHeight - gapHeight - minPipeHeight;
+            }
+
+            const topPipeHeight = pipeHeight;
+            const bottomPipeHeight = container.clientHeight - topPipeHeight - gapHeight;
 
             const pipeTop = document.createElement('div');
             const pipeBottom = document.createElement('div');
@@ -282,34 +276,41 @@
             pipeTop.className = 'pipe pipe-top';
             pipeBottom.className = 'pipe pipe-bottom';
 
-            pipeTop.style.height = pipeHeight + 'px';
-            pipeBottom.style.height = container.clientHeight - pipeHeight - gapHeight + 'px';
+            pipeTop.style.height = topPipeHeight + 'px';
+            pipeTop.style.width = pipeWidth + 'px';
+            pipeTop.style.left = container.clientWidth + 'px';
 
-            const pipeX = container.clientWidth;
-            pipeTop.style.left = pipeX + 'px';
-            pipeBottom.style.left = pipeX + 'px';
+            pipeBottom.style.height = bottomPipeHeight + 'px';
+            pipeBottom.style.width = pipeWidth + 'px';
+            pipeBottom.style.left = container.clientWidth + 'px';
+            pipeBottom.style.top = topPipeHeight + gapHeight + 'px';
+
 
             container.appendChild(pipeTop);
             container.appendChild(pipeBottom);
 
-            pipes.push({ top: pipeTop, bottom: pipeBottom, x: pipeX });
+            pipes.push({ top: pipeTop, bottom: pipeBottom, x: container.clientWidth });
         }
+
 
         function updatePipes() {
             if (!gameRunning) return;
             for (let i = pipes.length - 1; i >= 0; i--) {
                 const pipe = pipes[i];
-                
+
+                // Move the pipe
+                pipe.x -= pipeSpeed;
+                pipe.top.style.left = pipe.x + 'px';
+                pipe.bottom.style.left = pipe.x + 'px';
+
+                // Check for collision
                 if (checkCollision(pipe)) {
                     gameOver();
                     return;
                 }
 
-                pipe.x -= pipeSpeed;
-                pipe.top.style.left = pipe.x + 'px';
-                pipe.bottom.style.left = pipe.x + 'px';
-
-                if (pipe.x + pipe.top.clientWidth < 0) {
+                // Remove pipes that are out of the screen
+                if (pipe.x + pipeWidth < 0) {
                     pipe.top.remove();
                     pipe.bottom.remove();
                     pipes.shift();
@@ -321,18 +322,16 @@
 
         function checkCollision(pipe) {
             const birdRect = bird.getBoundingClientRect();
-            if (!pipe.top || !pipe.bottom) return false;
-
             const topPipeRect = pipe.top.getBoundingClientRect();
             const bottomPipeRect = pipe.bottom.getBoundingClientRect();
 
             return (
-                (birdRect.left < topPipeRect.right && 
-                 birdRect.right > topPipeRect.left && 
-                 birdRect.top < topPipeRect.bottom) ||
-                (birdRect.left < bottomPipeRect.right && 
-                 birdRect.right > bottomPipeRect.left && 
-                 birdRect.bottom > bottomPipeRect.top)
+                birdRect.left < topPipeRect.right &&
+                birdRect.right > topPipeRect.left &&
+                birdRect.top < topPipeRect.bottom ||
+                birdRect.left < bottomPipeRect.right &&
+                birdRect.right > bottomPipeRect.left &&
+                birdRect.bottom > bottomPipeRect.top
             );
         }
 
@@ -363,6 +362,8 @@
         function startGame() {
             startMenu.style.display = 'none';
             gameRunning = true;
+            score = 0;
+            scoreDisplay.textContent = score;
             gameLoopInterval = setInterval(() => {
                 updateBird();
                 updatePipes();
@@ -373,7 +374,7 @@
         function scheduleNextPipe() {
             if (!gameRunning) return;
             createPipe();
-            const nextInterval = Math.random() * 500 + 1750; // Random interval between 1.75-2.25s
+            const nextInterval = Math.random() * 500 + 1750;
             pipeCreationInterval = setTimeout(scheduleNextPipe, nextInterval);
         }
 
