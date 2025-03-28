@@ -89,7 +89,7 @@
             height: 0;
             overflow: hidden;
             background-color: transparent;
-            box-sizing: border-box; /* Include padding and border in element's total width and height */
+            box-sizing: border-box;
         }
 
         .pipe-top {
@@ -104,6 +104,10 @@
             width: 100%;
             height: auto;
             display: block;
+        }
+
+        .pipe-top .pipe-image {
+             transform: rotate(180deg);
         }
 
         .score {
@@ -290,19 +294,19 @@
             pipeTop.style.width = pipeWidth + 'px';
             pipeTop.style.left = container.clientWidth + 'px';
             pipeTop.style.overflow = 'hidden';
-           
+
 
             pipeBottom.style.height = bottomPipeHeight + 'px';
             pipeBottom.style.width = pipeWidth + 'px';
             pipeBottom.style.left = container.clientWidth + 'px';
             pipeBottom.style.top = topPipeHeight + gapHeight + 'px';
             pipeBottom.style.overflow = 'hidden';
-           
+
 
             const pipeTopImage = document.createElement('img');
             pipeTopImage.src = pipeImageSrc;
             pipeTopImage.className = 'pipe-image';
-            pipeTopImage.style.width = '100%'; 
+            pipeTopImage.style.width = '100%';
             pipeTopImage.style.height = 'auto';
             pipeTop.appendChild(pipeTopImage);
 
