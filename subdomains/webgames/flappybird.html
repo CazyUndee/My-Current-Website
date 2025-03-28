@@ -15,7 +15,7 @@
             --footer-border: #555;
             --input-bg: #222;
         }
-    
+
         body.dark-mode.page-loaded {
             min-height: 100vh;
             margin: 0;
@@ -24,7 +24,7 @@
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
         }
-    
+
         #flappy-container {
             position: relative;
             width: 90vw;
@@ -38,7 +38,7 @@
             user-select: none;
             touch-action: manipulation;
         }
-    
+
         #bird {
             position: absolute;
             width: 40px;
@@ -54,7 +54,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             animation: flap 0.5s infinite;
         }
-    
+
         @keyframes flap {
             0% {
                 transform: rotate(0deg);
@@ -66,11 +66,11 @@
                 transform: rotate(0deg);
             }
         }
-    
+
         #bird.flap {
             animation: flap-fast 0.2s infinite;
         }
-    
+
         @keyframes flap-fast {
             0% {
                 transform: rotate(-20deg);
@@ -82,7 +82,7 @@
                 transform: rotate(0deg);
             }
         }
-    
+
         .pipe-container {
             position: absolute;
             top: 0;
@@ -90,30 +90,30 @@
             height: 100%;
             overflow: hidden;
         }
-    
+
         .pipe {
             width: 80px;
             background-color: transparent;
             position: absolute;
             overflow: hidden; /* This should cut off the image */
         }
-    
+
         .pipe-top {
             top: 0; /* Stick to the top of its container */
             transform: rotate(180deg); /* Flip it downwards */
         }
-    
+
         .pipe-bottom {
             bottom: 0; /* Stick to the bottom of its container */
             /* transform: rotate(180deg);  NO ROTATION FOR BOTTOM PIPE */
         }
-    
+
         .pipe-image {
             display: block;
             width: 100%;
             height: auto;
         }
-    
+
         .score {
             position: absolute;
             top: 10px;
@@ -123,7 +123,7 @@
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
             z-index: 10;
         }
-    
+
         #game-over {
             display: none;
             position: absolute;
@@ -137,7 +137,7 @@
             text-align: center;
             z-index: 20;
         }
-    
+
         #start-menu {
             display: flex;
             flex-direction: column;
@@ -154,7 +154,7 @@
             border-radius: 10px;
             z-index: 15;
         }
-    
+
         #about-menu {
             display: none;
             flex-direction: column;
@@ -174,7 +174,7 @@
             min-width: 350px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-    
+
         #game-over button,
         #start-menu button,
         #about-menu button {
@@ -188,7 +188,7 @@
             min-width: 150px;
             transition: background-color 0.2s;
         }
-    
+
         #game-over button:hover,
         #start-menu button:hover,
         #about-menu button:hover {
@@ -250,45 +250,46 @@
         let pipes = [];
         let gameRunning = false;
         let gapHeight = 200; // Increased gap height
-        let pipeSpeed = 1; // SLOWER PIPE SPEED
+        let pipeSpeed = 2; // FASTER PIPE SPEED
         let gameLoopInterval;
         let pipeCreationInterval;
         let rotationAngle = 0;
         const pipeWidth = 80;
         const minPipeHeight = 50;
         const maxPipeHeight = container.clientHeight - gapHeight - minPipeHeight;
-        const pipeImageSrc = '../../images/pipe.jpg';
+        const pipeImageSrc = '../../images/pipe.png';
         let animationFrameId;
-        let canJump = true; // For debouncing
 
         // Fixed time step variables
         const targetFPS = 60;
-        const timeStep = 1000 / targetFPS; // Milliseconds per frame
+        const timeStep = 1000 / targetFPS;
         let lastTime = 0;
         let accumulator = 0;
 
         function update(deltaTime) {
             if (!gameRunning) return;
-            velocity += gravity * (deltaTime / timeStep); // Adjust gravity for time step
-            birdY += velocity * (deltaTime / timeStep); // Adjust velocity for time step
+            velocity += gravity * (deltaTime / timeStep);
+            birdY += velocity * (deltaTime / timeStep);
             bird.style.top = birdY + 'px';
             rotationAngle = Math.max(-45, Math.min(45, velocity * 3));
             bird.style.transform = `rotate(${rotationAngle}deg)`;
 
             if (birdY < 0 || birdY > container.clientHeight - bird.clientHeight) {
                 gameOver();
+                return;
             }
 
-            // Update pipes based on time step
+            // Update pipes
             for (let i = pipes.length - 1; i >= 0; i--) {
                 const pipe = pipes[i];
-                pipe.x -= pipeSpeed * (deltaTime / timeStep); // Adjust pipe speed for time step
+                pipe.x -= pipeSpeed * (deltaTime / timeStep);
                 pipe.container.style.left = pipe.x + 'px';
 
                 const birdRect = bird.getBoundingClientRect();
                 const topPipeRect = pipe.top.getBoundingClientRect();
                 const bottomPipeRect = pipe.bottom.getBoundingClientRect();
 
+                // Collision detection
                 if (
                     birdRect.left < topPipeRect.right &&
                     birdRect.right > topPipeRect.left &&
@@ -317,12 +318,8 @@
         }
 
         function jump() {
-            if (!gameRunning || !canJump) return;
-            velocity = jumpHeight;
-            canJump = false;
-            setTimeout(() => {
-                canJump = true;
-            }, 100); // Allow jumping again after 100ms
+            if (!gameRunning) return;
+            velocity = jumpHeight; // Still super simple
         }
 
         function createPipe() {
@@ -417,15 +414,15 @@
             });
             pipes = [];
             scheduleNextPipe();
-            lastTime = performance.now(); // Initialize lastTime
-            accumulator = 0; // Reset accumulator
-            animationFrameId = requestAnimationFrame(gameLoop); // Start the animation loop
+            lastTime = performance.now();
+            accumulator = 0;
+            animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         function scheduleNextPipe() {
             if (!gameRunning) return;
             createPipe();
-            const nextInterval = Math.random() * 500 + 1750;
+            const nextInterval = Math.random() * 800 + 1200;
             pipeCreationInterval = setTimeout(scheduleNextPipe, nextInterval);
         }
 
@@ -440,10 +437,10 @@
         }
 
         // Event listeners
-        document.addEventListener('click', jump);
+        document.addEventListener('click', () => setTimeout(jump, 0));
         document.addEventListener('touchstart', (event) => {
             event.preventDefault();
-            jump();
+            setTimeout(jump, 0);
         });
 
         // Initialize game
