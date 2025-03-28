@@ -84,9 +84,12 @@
         }
 
         .pipe {
-            position: absolute; /* Important: Make pipes absolutely positioned */
+            position: absolute;
             width: 80px;
-            background-color: green;
+            height: 0;
+            overflow: hidden;
+            background-color: transparent;
+            box-sizing: border-box; /* Include padding and border in element's total width and height */
         }
 
         .pipe-top {
@@ -95,6 +98,12 @@
 
         .pipe-bottom {
             top: 0;
+        }
+
+        .pipe-image {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .score {
@@ -237,9 +246,10 @@
         let gameLoopInterval;
         let pipeCreationInterval;
         let rotationAngle = 0;
-        const pipeWidth = 80; // Define pipe width
-        const minPipeHeight = 50; // Minimum pipe height
+        const pipeWidth = 80;
+        const minPipeHeight = 50;
         const maxPipeHeight = container.clientHeight - gapHeight - minPipeHeight;
+        const pipeImageSrc = '../../images/pipe.jpg';
 
         function updateBird() {
             if (!gameRunning) return;
@@ -279,12 +289,29 @@
             pipeTop.style.height = topPipeHeight + 'px';
             pipeTop.style.width = pipeWidth + 'px';
             pipeTop.style.left = container.clientWidth + 'px';
+            pipeTop.style.overflow = 'hidden';
+           
 
             pipeBottom.style.height = bottomPipeHeight + 'px';
             pipeBottom.style.width = pipeWidth + 'px';
             pipeBottom.style.left = container.clientWidth + 'px';
             pipeBottom.style.top = topPipeHeight + gapHeight + 'px';
+            pipeBottom.style.overflow = 'hidden';
+           
 
+            const pipeTopImage = document.createElement('img');
+            pipeTopImage.src = pipeImageSrc;
+            pipeTopImage.className = 'pipe-image';
+            pipeTopImage.style.width = '100%'; 
+            pipeTopImage.style.height = 'auto';
+            pipeTop.appendChild(pipeTopImage);
+
+            const pipeBottomImage = document.createElement('img');
+            pipeBottomImage.src = pipeImageSrc;
+            pipeBottomImage.className = 'pipe-image';
+            pipeBottomImage.style.width = '100%';
+            pipeBottomImage.style.height = 'auto';
+            pipeBottom.appendChild(pipeBottomImage);
 
             container.appendChild(pipeTop);
             container.appendChild(pipeBottom);
